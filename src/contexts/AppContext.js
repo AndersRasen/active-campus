@@ -17,10 +17,12 @@ const initState = {
   organizations: [],
   events: [],
   roles: [],
+  breadCrum: '',
 };
 
 const _reduser = (state, action) => {
   console.log('update app state:', action.type, action.payload); // ! for debuging
+  console.log(state);
   switch (action.type) {
     case 'user':
       return {
@@ -47,13 +49,17 @@ const _reduser = (state, action) => {
         ...state,
         roles: action.payload
       };
+    case 'breadCrum':
+      return {
+        ...state,
+        breadCrum: action.payload
+      };
     default:
       return state;
   }
 };
 
 const AppProvider = ({ children }) => {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
   const [state, dispatch] = useReducer(_reduser, initState);
@@ -99,7 +105,6 @@ const AppProvider = ({ children }) => {
       if (state.user?.id) {
         const orgUnsub = liveOrganizations(state.user.organizations, _liveOrganizations);
         await _loadData();
-        navigate('/');
         setLoading(false);
         return [orgUnsub];
       }

@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppState } from "contexts/AppContext";
-import EventCard from "./EventCard";
+import EventCard from "components/EventCard";
 
 const EventsContainer = ({ events }) => {
+  const navigate = useNavigate();
   const { state } = useAppState();
 
   if (state.organizations.length === 0) {
@@ -19,17 +20,15 @@ const EventsContainer = ({ events }) => {
   if (events.length === 0) {
     return (
       <div>
-        <p className="text-xl text-placeholder">
-          Ingen aktive eller arkiverte arrangementer for organisasjonen: <span className="font-bold">{state.currentOrganization.short_name}</span>.
-        </p>
+        <p className="text-xl text-placeholder">Finnes ingen arrangementer for gjeldene organisasjon.</p>
       </div>
     );
   }
 
   return (
-    <div className="w-full flex flex-wrap gap-5 2xl:gap-x-10">
+    <div className="flex flex-wrap gap-5">
       {events.map(event => (
-        <EventCard key={event.id} event={event} />
+        <EventCard key={event.id} event={event} onClick={() => navigate(event.id)} />
       ))}
     </div>
   );

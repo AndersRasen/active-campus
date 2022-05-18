@@ -1,4 +1,5 @@
 import { db } from "../firebase";
+import { uploadFile } from "./storage";
 import { collection, doc, getDoc, getDocs, addDoc, setDoc, query, where, Timestamp, onSnapshot, deleteDoc } from "firebase/firestore";
 
 // COLLECTIONS
@@ -141,12 +142,13 @@ const deleteOrganization = async (orgID) => {
 // ORGANIZATIONS/EVENTS
 
 const createEventObject = (
-  userID, name, description, address, email_body,
+  userID, name, imageURL, description, address, email_body,
   date_from, date_to, signup_open, signup_close,
   max_participants, is_waiting_list, is_ticket, forms
 ) => {
   return {
     name: name,
+    image: imageURL,
     description: description,
     address: address,
     email_body: email_body,
@@ -172,13 +174,14 @@ const createEventObject = (
 };
 
 const createEvent = async (
-  orgID, userID, name, description, address,
+  orgID, userID, name, imageFile, description, address,
   email_body, date_from, date_to, signup_open, signup_close,
   max_participants, is_waiting_list, is_ticket, forms
 ) => {
+  const imageURL = await uploadFile(orgID, imageFile);
   const eventRef = _getEventRef(orgID);
   const data = createEventObject(
-    userID, name, description, address,
+    userID, name, imageURL, description, address,
     email_body, date_from, date_to, signup_open, signup_close,
     max_participants, is_waiting_list, is_ticket, forms
   );
@@ -188,6 +191,11 @@ const createEvent = async (
 const getEvent = async (orgID, eventID) => {
   const eventRef = _getEventRef(orgID);
   return await getDoc(doc(eventRef, eventID));
+};
+
+const getAllEvents = async (orgID) => {
+  const eventRef = _getEventRef(orgID);
+  return await getDocs(query(eventRef));
 };
 
 const liveEvents = (organizationID, callbackFunction) => {
@@ -239,6 +247,7 @@ export {
   // organizations/events
   createEvent,
   getEvent,
+  getAllEvents,
   liveEvents,
   // organizations/user_role
 

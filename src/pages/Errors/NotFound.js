@@ -11,8 +11,7 @@ const NotFound = () => {
 			let r = Math.floor(Math.random() * 25) + 15;
 			let x = Math.random() * (canvas.width - r * 2) + r;
 			let y = Math.random() * (canvas.height - r * 2) + r;
-			// let c = '#5544FF';
-			let c = '#FF4444';
+			let c = '#ffe0e4';
 			balls.push(new Circle(canvas, ctx, x, y, r, c));
 		}
 
@@ -30,7 +29,7 @@ const NotFound = () => {
 	});
 
 	return (
-		<>
+		<div>
 			<canvas ref={canvasRef} className="bg-background"></canvas>
 			<div className="absolute top-0 bottom-0 left-0 right-0" >
 				<div className="flex flex-col items-center justify-center h-full py-2 gap-10" >
@@ -42,7 +41,7 @@ const NotFound = () => {
 					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	);
 };
 
@@ -68,9 +67,9 @@ class Circle {
 		this.c = c;
 
 		this.dx = Math.floor(Math.random() * 4) + 1;
-		this.dx *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
+		this.dx *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;
 		this.dy = Math.floor(Math.random() * 4) + 1;
-		this.dy *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
+		this.dy *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;
 	}
 
 	draw() {

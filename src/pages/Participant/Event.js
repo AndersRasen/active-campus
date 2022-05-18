@@ -1,228 +1,34 @@
-import { MdToday, MdAccessTime, MdLocationOn, MdSupervisorAccount, MdQrCode2 } from "react-icons/md";
+import { MdToday, MdAccessTime, MdLocationOn, MdSupervisorAccount } from "react-icons/md";
 import { useAppState } from "contexts/AppContext";
 import { createTimestamp } from "helpers/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "components/Actions/Button";
-import QRCode from "react-qr-code";
+import ShowQR from "./components/ShowQR";
 
 const Event = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { state } = useAppState();
-  const [event, setEvent] = useState();
-
-  // ! use and get the same event objects as the database - remove
-  const now = + new Date();
-  state.events = [{
-    id: '1',
-    name: 'Test event',
-    organization: 'Active Campus',
-    description: 'this is a random description',
-    date: {
-      from: createTimestamp(new Date(now + (3 * 20 * 60 * 60 * 1000))),
-      to: createTimestamp(new Date(now + (3 * 24 * 60 * 60 * 1000))),
-    },
-    address: {
-      city: 'sandefjord',
-      zip: '3222',
-      street: 'street 12'
-    },
-    contact: {
-      name: 'some name',
-      email: 'some@email.no',
-      tlf: '(+00) 000 00 000'
-    },
-    img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.XRcO27ILwLXjcnPPgROBhgHaE6%26pid%3DApi&f=1',
-    signup_count: '10',
-    max_participants: '30',
-  },
-  {
-    id: '2',
-    name: 'Test event',
-    description: 'this is a random description',
-    date: {
-      from: createTimestamp(new Date()),
-      to: createTimestamp(new Date()),
-    },
-    address: {
-      city: 'sandefjord',
-      zip: '3222',
-      street: 'street 12'
-    },
-    contact: {
-      name: 'some name',
-      email: 'some@email.no',
-      tlf: '(+00) 000 00 000'
-    },
-    img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fs3.amazonaws.com%2Fimages.seroundtable.com%2Fgoogle-events-1532691045.jpg&f=1&nofb=1',
-    signup_count: '10',
-    max_participants: '30',
-  },
-  {
-    id: '3',
-    name: 'Test event',
-    description: 'this is a random description',
-    date: {
-      from: createTimestamp(new Date()),
-      to: createTimestamp(new Date()),
-    },
-    address: {
-      city: 'sandefjord',
-      zip: '3222',
-      street: 'street 12'
-    },
-    contact: {
-      name: 'some name',
-      email: 'some@email.no',
-      tlf: '(+00) 000 00 000'
-    },
-    img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flh3.googleusercontent.com%2F6DGy7KSaoVk-rwbJG9wx4lD_lB6aShZ5Hr7Y35sQuVSgMS6sqNOKQMttpP3V34DEoqM5fpZkc_L7PfwKEmpgS-O1NzIxyzzvdbJm1Q&f=1&nofb=1',
-    signup_count: '10',
-    max_participants: '30',
-  },
-  {
-    id: '11',
-    name: 'Test event',
-    description: 'this is a random description',
-    date: {
-      from: createTimestamp(new Date()),
-      to: createTimestamp(new Date()),
-    },
-    address: {
-      city: 'sandefjord',
-      zip: '3222',
-      street: 'street 12'
-    },
-    contact: {
-      name: 'some name',
-      email: 'some@email.no',
-      tlf: '(+00) 000 00 000'
-    },
-    img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fs3.amazonaws.com%2Fimages.seroundtable.com%2Fgoogle-events-1532691045.jpg&f=1&nofb=1',
-    signup_count: '10',
-    max_participants: '30',
-  },
-  {
-    id: '21',
-    name: 'Test event',
-    description: 'this is a random description',
-    date: {
-      from: createTimestamp(new Date()),
-      to: createTimestamp(new Date()),
-    },
-    address: {
-      city: 'sandefjord',
-      zip: '3222',
-      street: 'street 12'
-    },
-    contact: {
-      name: 'some name',
-      email: 'some@email.no',
-      tlf: '(+00) 000 00 000'
-    },
-    img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.mos.cms.futurecdn.net%2FDFowFoB4BP47xdwVmGzxjn-1200-80.jpg&f=1&nofb=1',
-    signup_count: '10',
-    max_participants: '30',
-  },
-  {
-    id: '31',
-    name: 'Test event',
-    description: 'this is a random description',
-    date: {
-      from: createTimestamp(new Date()),
-      to: createTimestamp(new Date()),
-    },
-    address: {
-      city: 'sandefjord',
-      zip: '3222',
-      street: 'street 12'
-    },
-    contact: {
-      name: 'some name',
-      email: 'some@email.no',
-      tlf: '(+00) 000 00 000'
-    },
-    img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.iotforall.com%2Fwp-content%2Fuploads%2F2017%2F09%2F9.20-Google-Event-AMP-Image.jpg&f=1&nofb=1',
-    signup_count: '10',
-    max_participants: '30',
-  },
-  {
-    id: '12',
-    name: 'Test event',
-    description: 'this is a random description',
-    date: {
-      from: createTimestamp(new Date()),
-      to: createTimestamp(new Date()),
-    },
-    address: {
-      city: 'sandefjord',
-      zip: '3222',
-      street: 'street 12'
-    },
-    contact: {
-      name: 'some name',
-      email: 'some@email.no',
-      tlf: '(+00) 000 00 000'
-    },
-    img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.XRcO27ILwLXjcnPPgROBhgHaE6%26pid%3DApi&f=1',
-    signup_count: '10',
-    max_participants: '30',
-  },
-  {
-    id: '22',
-    name: 'Test event',
-    description: 'this is a random description',
-    date: {
-      from: createTimestamp(new Date()),
-      to: createTimestamp(new Date()),
-    },
-    address: {
-      city: 'sandefjord',
-      zip: '3222',
-      street: 'street 12'
-    },
-    contact: {
-      name: 'some name',
-      email: 'some@email.no',
-      tlf: '(+00) 000 00 000'
-    },
-    img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fs3.amazonaws.com%2Fimages.seroundtable.com%2Fgoogle-events-1532691045.jpg&f=1&nofb=1',
-    signup_count: '10',
-    max_participants: '30',
-  },
-  {
-    id: '23',
-    name: 'Test event',
-    description: 'this is a random description',
-    date: {
-      from: createTimestamp(new Date()),
-      to: createTimestamp(new Date()),
-    },
-    address: {
-      city: 'sandefjord',
-      zip: '3222',
-      street: 'street 12'
-    },
-    contact: {
-      name: 'some name',
-      email: 'some@email.no',
-      tlf: '(+00) 000 00 000'
-    },
-    img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flh3.googleusercontent.com%2F6DGy7KSaoVk-rwbJG9wx4lD_lB6aShZ5Hr7Y35sQuVSgMS6sqNOKQMttpP3V34DEoqM5fpZkc_L7PfwKEmpgS-O1NzIxyzzvdbJm1Q&f=1&nofb=1',
-    signup_count: '10',
-    max_participants: '30',
-  }];
-
-  // ! needs to check for valid/invalid id-event number
-  // state.events = [];
+  const [event, setEvent] = useState(false);
 
   useEffect(() => {
     const event = state.events.find(event => {
       return event.id === id;
     });
-    setEvent(event);
-  }, []);
+    if (event) {
+      setEvent(event);
+    }
+  }, [state.events]);
+
+  if (!event) {
+    return (
+      <div>
+        <h1 className="text-2xl font-bold mb-5">Ugylding arrangement</h1>
+        <p className="text-xl">Fant ikke arrangement med id: {id}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-5 sm:max-w-sm">
@@ -280,34 +86,9 @@ const Event = () => {
         </div>
       </div>
 
-      {ShowQR()}
+      <ShowQR />
     </div>
   );
-};
-
-const ShowQR = () => {
-  const qrValue = 'QR value'; // ! get from state
-  const [show, setShow] = useState(false);
-
-  // add check if user is signup on event
-  if (true) {
-    return (
-      <div onClick={() => setShow(!show)} className='hover:cursor-pointer w-fit'>
-        {show ? <QRCode
-          value={qrValue}
-          level="M"
-          bgColor="#F4F7FC"
-          className="my-5"
-        />
-          :
-          <div className="flex gap-5 items-center">
-            <span className="font-bold">QR-kode (klikk):</span>
-            <MdQrCode2 size={55} />
-          </div>
-        }
-      </div>
-    );
-  }
 };
 
 export default Event;

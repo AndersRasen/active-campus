@@ -10,7 +10,10 @@ import { useState } from "react";
 
 const Index = () => {
   const { state } = useAppState();
-  const [edit, setEdit] = useState({ email: "", role: "Member" });
+  const [newEmail, setNewEmail] = useState();
+  const [newRole, setNewRole] = useState();
+  const [editEmail, setEditEmail] = useState();
+  const [editRole, setEditRole] = useState();
 
   // ! get from state
   const roles = [
@@ -41,12 +44,8 @@ const Index = () => {
   ];
 
   const onEditClick = (email, role) => {
-    setEdit({
-      email: email,
-      role: roles.find(r => {
-        return r.name === role;
-      }).id
-    });
+    setEditEmail(email);
+    setEditRole(roles.find(r => { return r.name === role; }).id); // ! find from state
   };
 
   if (state.organizations.length === 0) {
@@ -76,12 +75,12 @@ const Index = () => {
           <h1 className="font-bold text-2xl">Legg til bruker</h1>
 
           <div>
-            <label htmlFor="">Epost</label>
-            <Input placeholder='brukers@epost.no' />
+            <label>Epost</label>
+            <Input placeholder='brukers@epost.no' value={newEmail} onChange={(e) => setNewEmail(e.target.value)} />
           </div>
           <div>
-            <label htmlFor="">Rolle</label>
-            <Dropdown options={roles} />
+            <label>Rolle</label>
+            <Dropdown options={roles} value={newRole} onChange={(e) => setNewRole(e.target.value)} />
           </div>
 
           <Button>Legg til</Button>
@@ -92,12 +91,12 @@ const Index = () => {
 
           <div className="flex flex-col gap-5">
             <div>
-              <label htmlFor="">Epost</label>
-              <Input placeholder='brukers@epost.no' value={edit.email} />
+              <label>Epost</label>
+              <Input placeholder='brukers@epost.no' value={editEmail} onChange={(e) => setEditEmail(e.target.value)} />
             </div>
             <div>
-              <label htmlFor="">Rolle</label>
-              <Dropdown options={roles} value={edit.role} />
+              <label>Rolle</label>
+              <Dropdown options={roles} value={editRole} onChange={(e) => setEditRole(e.target.value)} />
             </div>
 
             <Button>Oppdater</Button>
